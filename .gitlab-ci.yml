@@ -1,0 +1,20 @@
+include:
+  - component: $CI_SERVER_FQDN/components/opentofu/full-pipeline@0.27.0
+    inputs:
+      # The version must currently be specified explicitly as an input,
+      # to find the correctly associated images. # This can be removed
+      # once https://gitlab.com/gitlab-org/gitlab/-/issues/438275 is solved.
+      version: 0.27.0
+      opentofu_version: 1.8.2
+
+stages: [validate, test, build, deploy, cleanup]
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      variables:
+        TF_STATE_NAME: infra
+
+default:
+  tags:
+    - infra

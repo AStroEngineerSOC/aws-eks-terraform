@@ -1,0 +1,36 @@
+---
+global:
+  domain: argocd.papados.space
+  # image:
+  #   tag: ""
+  # nodeSelector: {}
+
+configs:
+  params:
+    server.insecure: true
+
+  repositories:
+    infra-helm-repo:
+      url: https://test.gitlab.com/test/helm/test-infra.git
+      name: test-infra
+      type: git
+      project: default
+      password: gitlab-ci-token
+      username: glpat-XHvtthL7vCesfpseQ-Wv
+
+  # secret:
+  #   gitlabSecret: ""
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: external-nginx
+    annotations:
+      cert-manager.io/cluster-issuer: http-01-production
+      # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      # nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    extraTls:
+      - hosts:
+        - argocd.papados.space
+        # Based on the ingress controller used secret might be optional
+        secretName: argocd.papados.space
